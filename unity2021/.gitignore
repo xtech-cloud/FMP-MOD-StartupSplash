@@ -1,0 +1,19 @@
+
+/_dist_/
+/_build_/
+/StartupSplash/Assets/TextMesh Pro/
+/StartupSplash/Assets/TextMesh Pro.meta
+/StartupSplash/Assets/Plugins/
+/StartupSplash/Assets/Plugins.meta
+/StartupSplash/Assets/3rd/
+/StartupSplash/Assets/3rd.meta
+/StartupSplash/Library/
+/StartupSplash/obj/
+/StartupSplash/Logs/
+/StartupSplash/Temp/
+/StartupSplash/UserSettings/
+/StartupSplash/*.sln
+/StartupSplash/*.csproj
+/StartupSplash/.vsconfig
+/StartupSplash/.vs/
+/.UNITY_HOME.env
