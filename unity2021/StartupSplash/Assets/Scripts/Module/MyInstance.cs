@@ -23,7 +23,7 @@ namespace XTC.FMP.MOD.StartupSplash.LIB.Unity
         }
 
         private UiReference uiReference_ = new UiReference();
-        private bool isOpen = false;
+        private GameObject triggerTick_ { get; set; }
 
         public MyInstance(string _uid, string _style, MyConfig _config, MyCatalog _catalog, LibMVCS.Logger _logger, Dictionary<string, LibMVCS.Any> _settings, MyEntryBase _entry, MonoBehaviour _mono, GameObject _rootAttachments)
             : base(_uid, _style, _config, _catalog, _logger, _settings, _entry, _mono, _rootAttachments)
@@ -69,6 +69,12 @@ namespace XTC.FMP.MOD.StartupSplash.LIB.Unity
             });
 
             uiReference_.splashCanvas.gameObject.SetActive(false);
+
+            triggerTick_ = new GameObject(string.Format("{0}#{1}#TriggerTick", MyEntryBase.ModuleName, uid));
+            var triggerTick = triggerTick_.AddComponent<TriggerTick>();
+            triggerTick.uid = uid;
+            triggerTick.model = entry_.getDummyModel();
+            triggerTick.style = style_;
         }
 
         /// <summary>
@@ -76,6 +82,7 @@ namespace XTC.FMP.MOD.StartupSplash.LIB.Unity
         /// </summary>
         public void HandleDeleted()
         {
+            GameObject.Destroy(triggerTick_);
         }
 
         /// <summary>
@@ -89,8 +96,6 @@ namespace XTC.FMP.MOD.StartupSplash.LIB.Unity
             rootUI.gameObject.SetActive(true);
             rootWorld.gameObject.SetActive(true);
             uiReference_.splashCanvas.gameObject.SetActive(true);
-            isOpen = true;
-            mono_.StartCoroutine(checkTick());
         }
 
         /// <summary>
@@ -101,23 +106,7 @@ namespace XTC.FMP.MOD.StartupSplash.LIB.Unity
             rootUI.gameObject.SetActive(false);
             rootWorld.gameObject.SetActive(false);
             uiReference_.splashCanvas.gameObject.SetActive(false);
-            isOpen = false;
         }
 
-        public IEnumerator checkTick()
-        {
-            while (isOpen)
-            {
-                yield return new WaitForEndOfFrame();
-                float pitch = Camera.main.transform.rotation.eulerAngles.x;
-                if (style_.cameraTrigger.active)
-                {
-                    if (pitch > style_.cameraTrigger.pitchMin && pitch < style_.cameraTrigger.pitchMax)
-                    {
-                        HandleClosed();
-                    }
-                }
-            }
-        }
     }
 }
